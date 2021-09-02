@@ -330,6 +330,16 @@ body {
         }
     }
 
+    .site-info__li--privacy-manager {
+        position: relative;
+        cursor: pointer;
+        background-color: #fdf0b3;
+
+        .is-disabled & {
+            @include is_disabled();
+        }
+    }
+
     .site-info--full-height {
         position: relative;
         margin-top: 0;

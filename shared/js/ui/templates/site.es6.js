@@ -5,12 +5,24 @@ const trackerNetworksIcon = require('./shared/tracker-network-icon.es6.js')
 const trackerNetworksText = require('./shared/tracker-networks-text.es6.js')
 const constants = require('../../../data/constants')
 
+function upperCaseFirst (string) {
+    return string.charAt(0).toUpperCase() + string.slice(1)
+}
+
 module.exports = function () {
     const tosdrMsg = (this.model.tosdr && this.model.tosdr.message) ||
         constants.tosdrMessages.unknown
 
     return bel`<div class="site-info site-info--main">
     <ul class="default-list">
+        <li class="js-site-privacy-manager-li site-info__li--privacy-manager border--bottom padded">
+        <div class="js-site-privacy-manager site-info--privacy-manager">
+            <a href="javascript:void(0)" class="link-secondary bold" role="button">
+                <span class="text-line-after-icon">Privacy Settings on ${upperCaseFirst(this.model.domain)}</span>
+                <span class="icon icon__arrow pull-right"></span>
+            </a>
+        </div>
+        </li>
         <li class="border--bottom site-info__rating-li main-rating js-hero-open">
             ${ratingHero(this.model, {
         showOpen: !this.model.disabled
@@ -52,13 +64,6 @@ module.exports = function () {
             <p class="site-info__protection js-site-protection bold">Site Privacy Protection</p>
             <div class="site-info__toggle-container">
                 ${toggleButton(this.model.protectionsEnabled, 'js-site-toggle pull-right')}
-            </div>
-        </li>
-        <li class="js-site-privacy-manager-li site-info__li--privacy-manager border--bottom padded">
-            <div class="js-site-privacy-manager site-info--privacy-manager">
-                <btn class="js-site-manage-privacy-settings site-info__manage-privacy-settings btn-pill">
-                    Manage privacy settings
-                </btn>
             </div>
         </li>
         <li class="js-site-manage-allowlist-li site-info__li--manage-allowlist padded ${this.model.displayBrokenUI ? 'is-hidden' : ''}">

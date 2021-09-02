@@ -91,7 +91,7 @@ Site.prototype = window.$.extend({},
                 'confirm-breakage-yes',
                 'confirm-breakage-no',
                 'confirm-breakage-message',
-                'manage-privacy-settings'
+                'privacy-manager'
             ])
 
             this.$gradescorecard = this.$('.js-hero-open')
@@ -106,7 +106,7 @@ Site.prototype = window.$.extend({},
                 [this.$manageallowlist, 'click', this._onManageAllowlistClick],
                 [this.$reportbroken, 'click', this._onReportBrokenSiteClick],
                 [this.store.subscribe, 'change:site', this.rerender],
-                [this.$manageprivacysettings, 'click', this._onManagePrivacySettingsClick]
+                [this.$privacymanager, 'click', this._onPrivacyManagerClick]
             ])
         },
 
@@ -210,7 +210,7 @@ Site.prototype = window.$.extend({},
             })
         },
 
-        _onManagePrivacySettingsClick: function () {
+        _onPrivacyManagerClick: function () {
             if (this.model.disabled) return
 
             this.views.privacyManager = new PrivacyManagerView({
