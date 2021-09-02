@@ -32,6 +32,10 @@ const search = (url) => {
     window.chrome.tabs.create({ url: `https://duckduckgo.com/?q=${url}&bext=${window.localStorage.os}cr` })
 }
 
+const openNewTab = (url) => {
+    window.chrome.tabs.create({ url: url })
+}
+
 const getExtensionURL = (path) => {
     return chrome.runtime.getURL(path)
 }
@@ -67,5 +71,6 @@ module.exports = {
     search: search,
     openOptionsPage: openOptionsPage,
     openExtensionPage: openExtensionPage,
-    getExtensionURL: getExtensionURL
+    getExtensionURL: getExtensionURL,
+    openNewTab: openNewTab
 }

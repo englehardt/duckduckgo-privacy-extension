@@ -860,6 +860,20 @@ chrome.webNavigation.onCommitted.addListener(details => {
     }
 })
 
+// Inject our content script to change social network settings
+chrome.webNavigation.onCommitted.addListener(details => {
+    const tab = tabManager.get({ tabId: details.tabId })
+
+    if (details.url.startsWith('https://www.facebook.com/off_facebook_activity')) {
+        chrome.tabs.executeScript(details.tabId, {
+            file: 'public/js/content-scripts/social-settings.js',
+            matchAboutBlank: true,
+            runAt: 'document_idle',
+            frameId: details.frameId
+        })
+    }
+})
+
 /**
  * ALARMS
  */

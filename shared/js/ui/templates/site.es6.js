@@ -54,6 +54,13 @@ module.exports = function () {
                 ${toggleButton(this.model.protectionsEnabled, 'js-site-toggle pull-right')}
             </div>
         </li>
+        <li class="js-site-privacy-manager-li site-info__li--privacy-manager border--bottom padded">
+            <div class="js-site-privacy-manager site-info--privacy-manager">
+                <btn class="js-site-manage-privacy-settings site-info__manage-privacy-settings btn-pill">
+                    Manage privacy settings
+                </btn>
+            </div>
+        </li>
         <li class="js-site-manage-allowlist-li site-info__li--manage-allowlist padded ${this.model.displayBrokenUI ? 'is-hidden' : ''}">
             ${renderManageAllowlist(this.model)}
         </li>
