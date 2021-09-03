@@ -4,6 +4,11 @@ const ratingHero = require('./shared/rating-hero.es6.js')
 const trackerNetworksIcon = require('./shared/tracker-network-icon.es6.js')
 const trackerNetworksText = require('./shared/tracker-networks-text.es6.js')
 const constants = require('../../../data/constants')
+const privacyManager = require('./../../background/privacy-manager.es6')
+
+function upperCaseFirst (string) {
+    return string.charAt(0).toUpperCase() + string.slice(1)
+}
 
 module.exports = function () {
     const tosdrMsg = (this.model.tosdr && this.model.tosdr.message) ||
@@ -11,6 +16,15 @@ module.exports = function () {
 
     return bel`<div class="site-info site-info--main">
     <ul class="default-list">
+        <li class="js-site-privacy-manager-li site-info__li--privacy-manager border--bottom padded
+            ${privacyManager.hasPrivacySettings(this.model.domain) ? '' : 'is-hidden'}">
+        <div class="js-site-privacy-manager site-info--privacy-manager">
+            <a href="javascript:void(0)" class="link-secondary bold" role="button">
+                <span class="text-line-after-icon">Privacy Settings on ${upperCaseFirst(this.model.domain)}</span>
+                <span class="icon icon__arrow pull-right"></span>
+            </a>
+        </div>
+        </li>
         <li class="border--bottom site-info__rating-li main-rating js-hero-open">
             ${ratingHero(this.model, {
         showOpen: !this.model.disabled
