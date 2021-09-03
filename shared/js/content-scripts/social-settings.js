@@ -15,9 +15,10 @@
         }
     }
 
-    function waitAndClick(selectors) {
+    function waitAndClick(selectors, onCompleteCallback) {
         if (selectors.length === 0) {
             console.log('Clicked all selectors')
+            onCompleteCallback('success')
             return
         }
         const selector = selectors[0]
@@ -31,13 +32,14 @@
             
             // If element not found, wait longer
             if (elem === null) {
-                waitAndClick(selectors)
+                waitAndClick(selectors, onCompleteCallback)
                 return
             }
             
             // If element meets stopping condition of selector, return
             if (selector.shouldStop(elem)) {
                 console.log('selector:', selector.xpath,'stopping condition met')
+                onCompleteCallback('already-set')
                 return
             }
 
@@ -47,12 +49,13 @@
 
             // Move to the next selector
             selectors.shift()
-            waitAndClick(selectors)
+            waitAndClick(selectors, onCompleteCallback)
         }, 500);
     }
 
-    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    chrome.runtime.onMessage.addListener((message, sender, callback) => {
         const selectors = message.map(arr => new Selector(...arr))
-        waitAndClick(selectors)
+        waitAndClick(selectors, callback)
+        return true
       });
 })()

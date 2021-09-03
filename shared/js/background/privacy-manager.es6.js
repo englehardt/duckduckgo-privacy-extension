@@ -29,7 +29,10 @@ function changePrivacySettings(domain) {
                 matchAboutBlank: true,
                 runAt: 'document_idle',
             }, () => {
-                chrome.tabs.sendMessage(tab.id, setting.selectors)
+                chrome.tabs.sendMessage(tab.id, setting.selectors, (resp) => {
+                    console.log('Content script finished! Status:', resp)
+                    chrome.tabs.remove(tab.id)
+                })
             })
         })
     })
