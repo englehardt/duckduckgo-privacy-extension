@@ -4,13 +4,71 @@ const settings = {
             name: 'off-facebook-activity',
             url: 'https://www.facebook.com/off_facebook_activity',
             selectors: [
-                ["//span[text()='Manage Your Off-Facebook Activity']"],
-                ["//span[text()='Manage Future Activity']"],
-                ["//button/div/div[text()='Manage Future Activity']"],
-                ["//input", "(elem) => {return elem.getAttribute('aria-checked') === 'false'}"],
-                ["//button/div/div[text()='Turn Off']"]
+                [
+                    "window.frames[0].document",
+                    "//span[text()='Manage Your Off-Facebook Activity']"
+                ],
+                [
+                    "window.frames[0].document",
+                    "//span[text()='Manage Future Activity']"
+                ],
+                [
+                    "window.frames[0].document",
+                    "//button/div/div[text()='Manage Future Activity']"
+                ],
+                [
+                    "window.frames[0].document",
+                    "//input",
+                    "(elem) => {return elem.getAttribute('aria-checked') === 'false'}",
+                    true // if stopping condition met, stop rest of sequence
+                ],
+                [
+                    "window.frames[0].document",
+                    "//button/div/div[text()='Turn Off']"
+                ]
             ]
         },
+        {
+            name: 'partner-activity',
+            url: 'https://www.facebook.com/adpreferences/ad_settings',
+            selectors: [
+                [
+                    "document",
+                    "//span[text()='Data about your activity from partners']"
+                ],
+                [
+                    "document",
+                    "//div[div/div/div/span[text()='Use Data from Partners']]//following-sibling::div//input",
+                    "(elem) => {return elem.getAttribute('aria-checked') === 'false'}"
+                ]
+            ]
+        },
+        {
+            name: 'manage-ad-topics',
+            url: 'https://www.facebook.com/adpreferences/ad_topics',
+            selectors: [
+                [
+                    "document",
+                    "//div[div/div/div/span[text()='Alcohol']]//following-sibling::div//span",
+                    "(elem) => { return elem.textContent === 'You\\'re seeing fewer ads about this topic' }"
+                ],
+                [
+                    "document",
+                    "//div[div/div/div/span[text()='Parenting']]//following-sibling::div//span",
+                    "(elem) => { return elem.textContent === 'You\\'re seeing fewer ads about this topic' }"
+                ],
+                [
+                    "document",
+                    "//div[div/div/div/span[text()='Pets']]//following-sibling::div//span",
+                    "(elem) => { return elem.textContent === 'You\\'re seeing fewer ads about this topic' }"
+                ],
+                [
+                    "document",
+                    "//div[div/div/div/span[text()='Social Issues, Elections or Politics']]//following-sibling::div//span",
+                    "(elem) => { return elem.textContent === 'You\\'re seeing fewer ads about this topic' }"
+                ]
+            ]
+        }
     ],
     'example.com': [
     ]

@@ -2,12 +2,22 @@
     console.log('injected')
 
     class Selector {
-        constructor(xpath, stoppingCondition) {
+        constructor(documentString, xpath, stoppingCondition, shouldEndSequence) {
+            this.documentString = documentString
             this.xpath = xpath
             this.stoppingCondition = eval(stoppingCondition)
+            this.shouldEndSequence = shouldEndSequence !== undefined ? shouldEndSequence : false
+        }
+
+        get document() {
+            return eval(this.documentString)
         }
 
         shouldStop(elem) {
+            return this.shouldEndSequence && this.shouldSkip(elem)
+        }
+
+        shouldSkip(elem) {
             if (this.stoppingCondition === undefined) {
                 return false
             }
@@ -18,16 +28,19 @@
     function waitAndClick(selectors, onCompleteCallback) {
         if (selectors.length === 0) {
             console.log('Clicked all selectors')
-            onCompleteCallback('success')
+
+            // Some settings take a moment to apply
+            setTimeout(() => {
+                onCompleteCallback('success')
+            }, 1000)
+
             return
         }
         const selector = selectors[0]
         setTimeout(() => {
-            // All of the FB elements are in the first iframe on the page
-            // we want a fresh reference in the setTimeout because the frames
-            // are injected as about:blank and then navigate
-            const doc = window.frames[0].document
+            console.log('Looking for', selector.xpath)
 
+            const doc = selector.document
             const elem = doc.evaluate(selector.xpath, doc, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
             
             // If element not found, wait longer
@@ -43,9 +56,11 @@
                 return
             }
 
-            // Click the element
-            console.log('clicking:', selector.xpath)
-            elem.click()
+            if (!selector.shouldSkip(elem)) {
+                // Click the element
+                console.log('clicking:', selector.xpath)
+                elem.click()
+            }
 
             // Move to the next selector
             selectors.shift()
