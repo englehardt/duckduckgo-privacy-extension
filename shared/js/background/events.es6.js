@@ -16,6 +16,7 @@ const onboarding = require('./onboarding.es6')
 const cspProtection = require('./csp-blocking.es6')
 const browserName = utils.getBrowserName()
 const devtools = require('./devtools.es6')
+const privacyManager = require('./privacy-manager.es6')
 
 const sha1 = require('../shared-utils/sha1')
 
@@ -620,6 +621,10 @@ chrome.runtime.onMessage.addListener((req, sender, res) => {
         devtools.postMessage(sender.tab?.id, req.debuggerMessage.action, req.debuggerMessage.message)
         return true
     }
+
+    if (req.changePrivacySettings) {
+        privacyManager.changePrivacySettings(req.changePrivacySettings)
+    }
 })
 
 /**
@@ -856,20 +861,6 @@ chrome.webNavigation.onCommitted.addListener(details => {
             matchAboutBlank: true,
             frameId: details.frameId,
             runAt: 'document_start'
-        })
-    }
-})
-
-// Inject our content script to change social network settings
-chrome.webNavigation.onCommitted.addListener(details => {
-    const tab = tabManager.get({ tabId: details.tabId })
-
-    if (details.url.startsWith('https://www.facebook.com/off_facebook_activity')) {
-        chrome.tabs.executeScript(details.tabId, {
-            file: 'public/js/content-scripts/social-settings.js',
-            matchAboutBlank: true,
-            runAt: 'document_idle',
-            frameId: details.frameId
         })
     }
 })

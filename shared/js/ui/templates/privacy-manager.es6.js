@@ -16,7 +16,7 @@ module.exports = function () {
         <div class="privacy-manager__details padded
             js-privacy-manager-details">
              The DuckDuckGo Privacy Manager will automatically set the
-             recommended privacy settings for this this. The site may
+             recommended privacy settings for this site. The site may
              ask you to confirm your password before changing settings.
         </div>
         <div class="text--center">

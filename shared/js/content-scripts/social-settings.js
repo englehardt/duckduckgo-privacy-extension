@@ -1,6 +1,20 @@
 (function setSocialSettings () {
     console.log('injected')
 
+    class Selector {
+        constructor(xpath, stoppingCondition) {
+            this.xpath = xpath
+            this.stoppingCondition = eval(stoppingCondition)
+        }
+
+        shouldStop(elem) {
+            if (this.stoppingCondition === undefined) {
+                return false
+            }
+            return this.stoppingCondition(elem)
+        }
+    }
+
     function waitAndClick(selectors) {
         if (selectors.length === 0) {
             console.log('Clicked all selectors')
@@ -37,26 +51,8 @@
         }, 500);
     }
 
-    class Selector {
-        constructor(xpath, stoppingCondition) {
-            this.xpath = xpath
-            this.stoppingCondition = stoppingCondition
-        }
-
-        shouldStop(elem) {
-            if (this.stoppingCondition === undefined) {
-                return false
-            }
-            return this.stoppingCondition(elem)
-        }
-    }
-
-    const fbSelectors = [
-        new Selector("//span[text()='Manage Your Off-Facebook Activity']"),
-        new Selector("//span[text()='Manage Future Activity']"),
-        new Selector("//button/div/div[text()='Manage Future Activity']"),
-        new Selector("//input", (elem) => {return elem.getAttribute('aria-checked') === "false"}),
-        new Selector("//button/div/div[text()='Turn Off']")
-    ]
-    waitAndClick(fbSelectors)
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+        const selectors = message.map(arr => new Selector(...arr))
+        waitAndClick(selectors)
+      });
 })()

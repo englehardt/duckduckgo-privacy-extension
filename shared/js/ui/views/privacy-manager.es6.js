@@ -1,5 +1,5 @@
 const Parent = require('./sliding-subview.es6.js')
-const browserUIWrapper = require('./../base/ui-wrapper.es6.js')
+const manager = require('./../../background/privacy-manager.es6')
 
 function PrivacyManager (ops) {
     this.model = ops.model
@@ -14,7 +14,6 @@ PrivacyManager.prototype = window.$.extend({},
     {
         _setup: function () {
             this._cacheElems('.js-privacy-manager', [
-                'details',
                 'run'
             ])
 
@@ -24,7 +23,9 @@ PrivacyManager.prototype = window.$.extend({},
         },
 
         _onRunClick: function () {
-            browserUIWrapper.openNewTab('https://www.facebook.com/off_facebook_activity')
+            chrome.runtime.sendMessage({
+                changePrivacySettings: this.model.domain
+            })
         }
     }
 )
